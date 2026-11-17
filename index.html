@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lire — les grands classiques, à voix haute</title>
+<meta name="description" content="Des textes du domaine public à lire et à travailler à voix haute : La Fontaine, Hugo, Dumas, Shakespeare, Homère, Molière. Avec un atelier de fluence chronométré.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF6EA; --paper2:#F3EAD8; --card:#FFFDF7; --ink:#2B2118; --ink2:#6B5D4C;
+  --line:#E0D3BC; --accent:#8B2E3F; --gold:#B8860B;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;
+  background-image:radial-gradient(#00000006 1.2px,transparent 1.2px);background-size:24px 24px;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit;cursor:pointer;border:none}
+.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(251,246,234,.95);
+  backdrop-filter:blur(10px);border-bottom:2px solid var(--ink)}
+.logo{display:flex;align-items:center;gap:9px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.03em}
+.logo .mk{width:34px;height:34px;border-radius:9px;background:var(--accent);color:#FFF6E9;display:grid;place-items:center;font-size:17px;box-shadow:2px 2px 0 var(--ink)}
+.logo small{display:block;font-family:Inter,sans-serif;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);font-weight:700}
+.spacer{flex:1}
+.tabs{display:flex;gap:6px}
+.tab{padding:7px 13px;border:2px solid var(--ink);border-radius:999px;background:#fff;font-weight:800;font-size:12.5px;box-shadow:2px 2px 0 var(--ink)}
+.tab.on{background:var(--ink);color:var(--paper)}
+main{max-width:1020px;margin:0 auto;padding:16px 16px 70px}
+.view{display:none}.view.on{display:block}
+
+h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,5vw,46px);letter-spacing:-.04em;line-height:1.02;margin:8px 0 0}
+h1 em{font-style:normal;color:var(--accent)}
+p.lead{color:var(--ink2);font-size:15px;max-width:60ch;margin:12px 0 0;line-height:1.6}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:20px 0 14px}
+.f{font-size:11.5px;font-weight:800;padding:6px 11px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink2)}
+.f.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.bk{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:14px;text-align:left;box-shadow:3px 3px 0 var(--ink);
+  display:flex;flex-direction:column;gap:7px;transition:.12s;min-height:158px}
+.bk:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.bk .g{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.bk h3{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;margin:0;letter-spacing:-.02em;line-height:1.15}
+.bk .a{font-family:Lora,serif;font-style:italic;font-size:14px;color:var(--ink2)}
+.bk .meta{margin-top:auto;display:flex;gap:8px;align-items:center;font-size:11px;font-weight:700;color:var(--ink2)}
+.bk .lv{background:var(--paper2);border-radius:99px;padding:2px 8px}
+
+/* ---------- LECTEUR ---------- */
+.reader{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:22px;box-shadow:4px 4px 0 var(--ink);margin-top:12px}
+.rhead{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:16px}
+.rhead h2{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin:0;letter-spacing:-.03em}
+.rhead .a{font-family:Lora,serif;font-style:italic;color:var(--ink2);font-size:14px}
+.rhead .spacer{flex:1}
+.tool{display:flex;gap:6px}
+.tool button{width:34px;height:34px;border-radius:9px;border:1.5px solid var(--line);background:#fff;font-weight:800;font-size:13px}
+.text{font-family:Lora,serif;font-size:19px;line-height:1.85;text-align:justify;hyphens:auto;color:#241B12}
+.text p{margin:0 0 1em}
+.text.big{font-size:23px}
+.text.huge{font-size:27px;line-height:1.75}
+.src{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink2);font-weight:600}
+.src a{color:var(--accent)}
+
+/* ---------- FLUENCE ---------- */
+.flu{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:20px;box-shadow:4px 4px 0 var(--ink);margin-top:14px}
+.timer{font-family:'Bricolage Grotesque',sans-serif;font-size:44px;letter-spacing:-.04em;text-align:center;margin:2px 0 6px}
+.timer.low{color:var(--accent)}
+.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.btn{padding:12px 18px;border-radius:12px;border:2px solid var(--ink);background:#fff;font-weight:800;font-size:14px;box-shadow:3px 3px 0 var(--ink)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn:active{transform:translateY(2px);box-shadow:1px 1px 0 var(--ink)}
+.wtext{font-family:Lora,serif;font-size:21px;line-height:2.05;text-align:justify}
+.wtext span{cursor:pointer;border-radius:4px;padding:1px 0;transition:background .1s}
+.wtext span:hover{background:#F3E7D0}
+.wtext span.miss{background:#FADBD8;color:#A02B2B;text-decoration:line-through;text-decoration-thickness:2px}
+.wtext span.done{background:#D9EAD3}
+.wtext span.stop{background:var(--ink);color:var(--paper);border-radius:4px}
+.hint{text-align:center;font-size:12.5px;color:var(--ink2);font-weight:600;margin:10px 0 0}
+.result{text-align:center;padding:8px 0}
+.result .big{font-family:'Bricolage Grotesque',sans-serif;font-size:56px;letter-spacing:-.04em;color:var(--accent);line-height:1}
+.result .lab{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-top:4px}
+.result p{font-size:14.5px;color:var(--ink2);max-width:46ch;margin:14px auto 0;line-height:1.6}
+.scale{margin:18px auto 0;max-width:520px}
+.scale .bar{height:14px;border-radius:99px;background:linear-gradient(90deg,#E8C9A0,#8FBF9F,#5E9E7A);border:1.5px solid var(--ink);position:relative}
+.scale .pin{position:absolute;top:-6px;width:4px;height:26px;background:var(--ink);border-radius:2px;transform:translateX(-2px)}
+.scale .marks{display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--ink2);margin-top:5px}
+.repere{background:var(--paper2);border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;margin-top:16px;font-size:13px;color:var(--ink2);line-height:1.6}
+.repere b{color:var(--ink)}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:12px}
+.pick button{text-align:left;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:700;line-height:1.3}
+.pick button small{display:block;font-weight:600;color:var(--ink2);margin-top:3px;font-size:11px}
+footer{text-align:center;color:#8C7F6D;font-size:11.5px;padding:22px 16px 40px;line-height:1.8}
+footer a{font-weight:700;border-bottom:1.5px solid var(--accent);color:var(--ink)}
+@media(max-width:620px){
+  .logo small{display:none}
+  .text{font-size:17px;line-height:1.8;text-align:left}
+  .wtext{font-size:18px;line-height:1.95;text-align:left}
+  .reader,.flu{padding:14px}
+  .timer{font-size:38px}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="logo"><span class="mk">L</span><span>LIRE<small>les classiques, à voix haute</small></span></div>
+  <div class="spacer"></div>
+  <div class="tabs">
+    <button class="tab on" id="tLib">Bibliothèque</button>
+    <button class="tab" id="tFlu">Fluence</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ BIBLIOTHÈQUE ============ -->
+<section class="view on" id="v-lib">
+  <h1>Ouvrir la lecture <em>à toutes les œuvres.</em></h1>
+  <p class="lead">Des textes du domaine public, entiers ou par larges extraits : contes, fables, poèmes, romans, théâtre, épopées. De quoi sortir du Petit Chaperon rouge sans perdre le fil — chaque texte est choisi pour être lu à voix haute.</p>
+
+  <div class="filters" id="fGenre"></div>
+  <div class="filters" id="fNiv" style="margin-top:-6px"></div>
+  <div class="grid" id="liste"></div>
+</section>
+
+<!-- ============ LECTEUR ============ -->
+<section class="view" id="v-read">
+  <button class="btn" id="backLib" style="margin-bottom:10px">← Bibliothèque</button>
+  <div class="reader">
+    <div class="rhead">
+      <div>
+        <h2 id="rTitre"></h2>
+        <div class="a" id="rAuteur"></div>
+      </div>
+      <div class="spacer"></div>
+      <div class="tool">
+        <button id="szMinus" title="Réduire le texte">A−</button>
+        <button id="szPlus" title="Agrandir le texte">A+</button>
+      </div>
+    </div>
+    <div class="text" id="rText"></div>
+    <div class="src" id="rSrc"></div>
+  </div>
+  <div style="text-align:center;margin-top:14px">
+    <button class="btn primary" id="goFlu">⏱️ Travailler la fluence sur ce texte</button>
+  </div>
+</section>
+
+<!-- ============ FLUENCE ============ -->
+<section class="view" id="v-fluence">
+  <h1>Lire à voix haute, <em>et se mesurer.</em></h1>
+  <p class="lead">On lit pendant une minute. On clique sur les mots ratés, puis sur le dernier mot atteint. L'application calcule les mots correctement lus par minute — le seul chiffre qui compte vraiment.</p>
+
+  <div id="fluPick">
+    <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;margin:22px 0 0">Choisis un texte</h2>
+    <div class="pick" id="pickList"></div>
+  </div>
+
+  <div id="fluPlay" style="display:none">
+    <div class="timer" id="timer">1:00</div>
+    <div class="controls">
+      <button class="btn primary" id="startBtn">Démarrer la lecture</button>
+      <button class="btn" id="finishBtn" style="display:none">J'ai fini / Arrêter</button>
+      <button class="btn" id="resetBtn">Recommencer</button>
+    </div>
+    <div class="wtext" id="wtext"></div>
+    <p class="hint" id="hint">Clique sur un mot quand il est mal lu. Le chrono démarre au premier clic sur « Démarrer ».</p>
+  </div>
+
+  <div id="fluResult" style="display:none">
+    <div class="flu">
+      <div class="result">
+        <div class="big" id="mclm">0</div>
+        <div class="lab">mots correctement lus / minute</div>
+        <div class="scale">
+          <div class="bar"><div class="pin" id="pin" style="left:0%"></div></div>
+          <div class="marks"><span>0</span><span>50</span><span>100</span><span>150</span><span>200</span></div>
+        </div>
+        <p id="verdic"></p>
+      </div>
+      <div class="repere" id="repere"></div>
+      <div style="text-align:center;margin-top:16px">
+        <button class="btn primary" id="againBtn">Refaire</button>
+        <button class="btn" id="otherBtn">Un autre texte</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Lire — textes du domaine public, reproduits d'après <a href="https://fr.wikisource.org/">Wikisource</a>.<br>
+  Aucune donnée ne quitte l'appareil · Les repères de fluence sont ceux des évaluations nationales.
+</footer>
+
+<script>
+const TEXTES = [{"auteur":"Victor Hugo","oeuvre":"Les Misérables","genre":"Roman","niveau":"CM2","source":"Les Misérables (1908)/Tome 2/Livre 3/01","texte":"Montfermeil est situé entre Livry et Chelles, sur la lisière méridionale de ce haut plateau qui sépare l’Ourcq de la Marne. Aujourd’hui c’est un assez gros bourg orné, toute l’année, de villas en plâtre, et, le dimanche, de bourgeois épanouis. En 1823, il n’y avait à Montfermeil ni tant de maisons blanches ni tant de bourgeois satisfaits. Ce n’était qu’un village dans les bois. On y rencontrait bien çà et là quelques maisons de plaisance du dernier siècle, reconnaissables à leur grand air, à leurs balcons en fer tordu et à ces longues fenêtres dont les petits carreaux font sur le blanc des volets fermés toutes sortes de verts différents. Mais Montfermeil n’en était pas moins un village. Les marchands de drap retirés et les agréés en villégiature ne l’avaient pas encore découvert. C’était un endroit paisible et charmant, qui n’était sur la route de rien ; on y vivait à bon marché de cette vie paysanne si abondante et si facile. Seulement l’eau y était rare à cause de l’élévation du plateau.\nIl fallait aller la chercher assez loin. Le bout du village qui est du côté de Gagny puisait son eau aux magnifiques étangs qu’il y a là dans les bois ; l’autre bout, qui entoure l’église et qui est du côté de Chelles, ne trouvait d’eau potable qu’à une petite source à mi-côte, près de la route de Chelles, à environ un quart d’heure de Montfermeil.\nC’était donc une assez rude besogne pour chaque ménage que cet approvisionnement de l’eau. Les grosses maisons, l’aristocratie, la gargote Thénardier en faisait partie, payaient un liard par seau d’eau à un bonhomme dont c’était l’état et qui gagnait à cette entreprise des eaux de Montfermeil environ huit sous par jour ; mais ce bonhomme ne travaillait que jusqu’à sept heures du soir l’été et jusqu’à cinq heures l’hiver, et une fois la nuit venue, une fois les volets des rez-de-chaussée clos, qui n’avait pas d’eau à boire en allait chercher ou s’en passait.\nC’était là la terreur de ce pauvre être que le lecteur n’a peut-être pas oublié, de la petite Cosette. On se souvient que Cosette était utile aux Thénardier de deux manières, ils se faisaient payer par la mère et ils se faisaient servir par l’enfant. Aussi quand la mère cessa tout à fait de payer, on vient de lire pourquoi dans les chapitres précédents, les Thénardier gardèrent Cosette. Elle leur remplaçait une servante. En cette qualité, c’était elle qui courait chercher de l’eau quand il en fallait. Aussi l’enfant, fort épouvantée de l’idée d’aller à la source la nuit, avait-elle grand soin que l’eau ne manquât jamais à la maison.","mots":443,"titre":"Les Misérables"},{"auteur":"Jules Verne","oeuvre":"Le Tour du monde en 80 jours","genre":"Roman","niveau":"CM1","source":"Le Tour du monde en quatre-vingts jours/Chapitre 4","texte":"À sept heures vingt-cinq, Phileas Fogg, après avoir gagné une vingtaine de guinées au whist, prit congé de ses honorables collègues, et quitta le Reform-Club. À sept heures cinquante, il ouvrait la porte de sa maison et rentrait chez lui.\nPassepartout, qui avait consciencieusement étudié son programme, fut assez surpris en voyant Mr. Fogg, coupable d’inexactitude, apparaître à cette heure insolite. Suivant la notice, le locataire de Saville-row ne devait rentrer qu’à minuit précis.\nPassepartout ne répondit pas. Cet appel ne pouvait s’adresser à lui. Ce n’était pas l’heure.\n— Je le sais, reprit Phileas Fogg, et je ne vous fais pas de reproche. Nous partons dans dix minutes pour Douvres et Calais. »\nUne sorte de grimace s’ébaucha sur la ronde face du Français. Il était évident qu’il avait mal entendu.\nPassepartout, l’œil démesurément ouvert, la paupière et le sourcil surélevés, les bras détendus, le corps affaissé, présentait alors tous les symptômes de l’étonnement poussé jusqu’à la stupeur.\n— Mais les malles ?… dit Passepartout, qui balançait inconsciemment sa tête de droite et de gauche.\n— Pas de malles. Un sac de nuit seulement. Dedans, deux chemises de laine, trois paires de bas. Autant pour vous. Nous achèterons en route. Vous descendrez mon mackintosh et ma couverture de voyage. Ayez de bonnes chaussures. D’ailleurs, nous marcherons peu ou pas. Allez. »\nPassepartout aurait voulu répondre. Il ne put. Il quitta la chambre de Mr. Fogg, monta dans la sienne, tomba sur une chaise, et employant une phrase assez vulgaire de son pays :\nEt, machinalement, il fit ses préparatifs de départ. Le tour du monde en quatre-vingts jours ! Avait-il affaire à un fou ? Non… C’était une plaisanterie ? On allait à Douvres, bien. À Calais, soit. Après tout, cela ne pouvait notablement contrarier le brave garçon, qui, depuis cinq ans, n’avait pas foulé le sol de la patrie. Peut-être même irait-on jusqu’à Paris, et, ma foi, il reverrait avec plaisir la grande capitale. Mais, certainement, un gentleman aussi ménager de ses pas s’arrêterait là… Oui, sans doute, mais il n’en était pas moins vrai qu’il partait, qu’il se déplaçait, ce gentleman, si casanier jusqu’alors !\nÀ huit heures, Passepartout avait préparé le modeste sac qui contenait sa garde-robe et celle de son maître ; puis, l’esprit encore troublé, il quitta sa chambre, dont il ferma soigneusement la porte, et il rejoignit Mr. Fogg.","mots":396,"titre":"Chapitre 4"},{"auteur":"Alexandre Dumas","oeuvre":"Les Trois Mousquetaires","genre":"Roman","niveau":"CM2","source":"Les Trois Mousquetaires/Chapitre 66","texte":"l était minuit à peu près ; la lune, échancrée par sa décroissance et ensanglantée par les dernières traces de l’orage, se levait derrière la petite ville d’Armentières, qui détachait sur sa lueur blafarde la silhouette sombre de ses maisons et le squelette de son haut clocher découpé à jour ; en face de la Lys roulait ses eaux pareilles à une rivière d’étain fondu, tandis que sur l’autre rive on voyait la masse noire des arbres se profiler sur un ciel orageux envahi par de gros nuages cuivrés qui faisaient une espèce de crépuscule au milieu de la nuit. À gauche s’élevait un vieux moulin abandonné, aux ailes immobiles, dans les ruines duquel une chouette faisait entendre son cri aigu, périodique et monotone. Çà et là, dans la plaine, à droite et à gauche du chemin que suivait le lugubre cortége, apparaissaient quelques arbres bas et trapus, qui semblaient des nains difformes accroupis pour guetter les hommes à cette heure sinistre.\nDe temps en temps un large éclair ouvrait l’horizon dans toute sa largeur, serpentait au-dessus de la masse noire des arbres et venait, comme un effrayant cimeterre couper le ciel et l’eau en deux parties. Pas un souffle de vent ne passait dans l’atmosphère alourdie, un silence de mort écrasait toute la nature, le sol était humide et glissant de la pluie qui venait de tomber, et les herbes, ranimées, jetaient leur parfum avec plus d’énergie.\nDeux valets traînaient milady, qu’ils tenaient chacun par un bras. Le bourreau marchait derrière, et lord de Winter, d’Artagnan, Athos, Porthos et Aramis marchaient derrière le bourreau.\nLes deux valets conduisaient milady du côté de la rivière : sa bouche était muette ; mais ses yeux parlaient avec leur inexprimable éloquence, suppliant tour à tour chacun de ceux qu’elle regardait.\n— Mille pistoles à chacun de vous si vous protégez ma fuite ; mais si vous me livrez à vos maîtres, j’ai ici près des vengeurs qui vous feront payer cher ma mort.\nAthos, qui avait entendu la voix de milady, s’approcha vivement ; lord de Winter en fit autant.\nArrivés au bord de l’eau, le bourreau s’approcha de milady et lui lia les pieds et les mains.\n— Vous êtes des lâches, vous êtes de misérables assassins, vous vous mettez à dix pour égorger une pauvre femme ; prenez garde, si je ne suis point secourue, je serai vengée !…","mots":399,"titre":"Chapitre 66"},{"auteur":"Molière","oeuvre":"L'Avare","genre":"Théâtre","niveau":"CM1","source":"L’Avare (Molière)/Édition Louandre, 1910/Acte III","texte":"Allons, venez çà tous ; que je vous distribue mes ordres pour tantôt, et règle à chacun son emploi. Approchez, dame Claude ; commençons par vous. (Elle tient un balai) Bon, vous voilà les armes à la main. Je vous commets au soin de nettoyer partout ; et surtout prenez garde de ne point frotter les meubles trop fort, de peur de les user. Outre cela, je vous constitue, pendant le souper, au gouvernement des bouteilles ; et, s’il s’en écarte quelqu’une, et qu’il se casse quelque chose, je m’en prendrai à vous, et le rabattrai sur vos gages.\nVous, Brindavoine, et vous, la Merluche, je vous établis dans la charge de rincer les verres et de donner à boire, mais seulement lorsque l’on aura soif, et non pas selon la coutume de certains impertinents de laquais, qui viennent provoquer les gens, et les faire aviser de boire lorsqu’on n’y songe pas. Attendez qu’on vous en demande plus d’une fois, et vous ressouvenez de porter toujours beaucoup d’eau.\nVous savez bien, Monsieur, qu’un des devants de mon pourpoint est couvert d’une grande tache de l’huile de la lampe.\nEt, moi, Monsieur, que j’ai mon haut-de-chausses tout troué par-derrière, et qu’on me voit, révérence parler…\nPaix ! Rangez cela adroitement du côté de la muraille, et présentez toujours le devant au monde. (À Brindavoine, en lui montrant comment il doit mettre son chapeau au-devant de son pourpoint, pour cacher la tache d’huile.) Et vous, tenez toujours votre chapeau ainsi, lorsque vous servirez.\nPour vous, ma fille, vous aurez l’œil sur ce que l’on desservira, et prendrez garde qu’il ne s’en fasse aucun dégât. Cela sied bien aux filles. Mais cependant préparez-vous à bien recevoir ma maîtresse, qui vous doit venir visiter, et vous mener avec elle à la foire. Entendez-vous ce que je vous dis ?\nEt vous, mon fils le damoiseau, à qui j’ai la bonté de pardonner l’histoire de tantôt, ne vous allez pas aviser non plus de lui faire mauvais visage.\nMon Dieu, nous savons le train des enfants dont les pères se remarient, et de quel œil ils ont coutume de regarder ce qu’on appelle belle-mère. Mais si vous souhaitez que je perde le souvenir de votre dernière fredaine, je vous recommande surtout de régaler d’un bon visage cette personne-là, et de lui faire enfin tout le meilleur accueil qu’il vous sera possible.","mots":396,"titre":"Acte III"},{"auteur":"Voltaire","oeuvre":"Candide","genre":"Conte","niveau":"CM2","source":"Candide, ou l’Optimisme/Beuchot 1829/Chapitre 29","texte":"Pendant que Candide, le baron, Pangloss, Martin, et Cacambo, contaient leurs aventures, qu’ils raisonnaient sur les événements contingents ou non contingents de cet univers, qu’ils disputaient sur les effets et les causes, sur le mal moral et sur le mal physique, sur la liberté et la nécessité, sur les consolations que l’on peut éprouver lorsqu’on est aux galères en Turquie, ils abordèrent sur le rivage de la Propontide, à la maison du prince de Transylvanie. Les premiers objets qui se présentèrent furent Cunégonde et la vieille, qui étendaient des serviettes sur des ficelles pour les faire sécher.\nLe baron pâlit à cette vue. Le tendre amant Candide en voyant sa belle Cunégonde rembrunie, les yeux éraillés, la gorge sèche, les joues ridées, les bras rouges et écaillés, recula trois pas, saisi d’horreur, et avança ensuite par bon procédé. Elle embrassa Candide et son frère : on embrassa la vieille : Candide les racheta toutes deux.\nIl y avait une petite métairie dans le voisinage ; la vieille proposa à Candide de s’en accommoder, en attendant que toute la troupe eût une meilleure destinée. Cunégonde ne savait pas qu’elle était enlaidie, personne ne l’en avait avertie : elle fit souvenir Candide de ses promesses avec un ton si absolu, que le bon Candide n’osa pas ; la refuser. Il signifia donc au baron qu’il allait se marier avec sa sœur. Je ne souffrirai jamais, dit le baron, une telle bassesse de sa part, et une telle insolence de la vôtre ; cette infamie ne me sera jamais reprochée : les enfants de ma sœur ne pourraient entrer dans les chapitres d’Allemagne. Non, jamais ma sœur n’épousera qu’un baron de l’empire. Cunégonde se jeta à ses pieds, et les baigna de larmes ; il fut inflexible. Maître fou, lui dit Candide, je t’ai réchappé des galères, j’ai payé ta rançon, j’ai payé celle de ta sœur ; elle lavait ici des écuelles, elle est laide, j’ai la bonté d’en faire ma femme ; et tu prétends encore t’y opposer ! je te retuerais si j’en croyais ma colère. Tu peux me tuer encore, dit le baron, mais tu n’épouseras pas ma sœur de mon vivant.","mots":363,"titre":"Chapitre 29"},{"auteur":"William Shakespeare","oeuvre":"Roméo et Juliette","genre":"Théâtre","niveau":"CM2","source":"Roméo et Juliette (trad. Hugo)","texte":"Samson et Grégoire, armés d’épées et de boucliers. SAMSON. Grégoire, sur ma parole, nous ne supporterons pas leurs brocards. GRÉGOIRE. Non, nous ne sommes pas gens à porter le brocart. SAMSON. Je veux dire que, s’ils nous mettent en colère, nous allongeons le couteau. GRÉGOIRE. Oui, mais prends garde qu’on ne t’allonge le cou tôt ou tard. SAMSON. Je frappe vite quand on m’émeut. GRÉGOIRE. Mais tu es lent à t’émouvoir. SAMSON. Un chien de la maison de Montague m’émeut. GRÉGOIRE. Qui est ému, remue ; qui est vaillant, tient ferme ; conséquemment, si tu es ému, tu lâches pied. SAMSON. Quand un chien de cette maison-là m’émeut, je tiens ferme. Je suis décidé à prendre le haut du pavé sur tous les Montagues, hommes ou femmes. GRÉGOIRE.","mots":128,"titre":"Roméo et Juliette"},{"auteur":"Paul Verlaine","oeuvre":"Poèmes saturniens","genre":"Poésie","niveau":"CE2","source":"Sagesse (1902)/« Écoutez la chanson bien douce »","texte":"Pourtant comme elle encore fière,\nEt dans les longs plis de son voile\nQui palpite aux brises d’automne,\nCache et montre au cœur qui s’étonne\nLa vérité comme une étoile. Elle dit, la voix reconnue. Que la bonté c’est notre vie. Que de la haine et de l’envie\nRien ne reste, la mort venue. Elle parle aussi de la gloire\nD’être simple sans plus attendre,\nEt de noces d’or et du tendre\nBonheur d’une paix sans victoire. Accueillez la voix qui persiste\nDans son naïf épithalame. Allez, rien n’est meilleur à l’âme\nQue de faire une âme moins triste ! Elle est en peine et de passage\nL’âme qui souffre sans colère. Et comme sa morale est claire !…\nÉcoutez la chanson bien sage.","mots":124,"titre":"« Écoutez la chanson bien douce »"}];
+const $ = s => document.querySelector(s);
+let cur = null, size = 0;
+
+/* ---------- bibliothèque ---------- */
+let fGenre = "Tout", fNiv = "Tout";
+function renderLib(){
+  const genres = ["Tout", ...new Set(TEXTES.map(t=>t.genre))];
+  const niveaux = ["Tout", ...new Set(TEXTES.map(t=>t.niveau))].sort();
+  const g=$("#fGenre"); g.innerHTML="";
+  genres.forEach(x=>{const b=document.createElement("button");b.className="f"+(x===fGenre?" on":"");b.textContent=x;
+    b.onclick=()=>{fGenre=x;renderLib();};g.appendChild(b);});
+  const n=$("#fNiv"); n.innerHTML="";
+  niveaux.forEach(x=>{const b=document.createElement("button");b.className="f"+(x===fNiv?" on":"");b.textContent=x;
+    b.onclick=()=>{fNiv=x;renderLib();};n.appendChild(b);});
+
+  const list = TEXTES.filter(t=>(fGenre==="Tout"||t.genre===fGenre)&&(fNiv==="Tout"||t.niveau===fNiv));
+  const L=$("#liste"); L.innerHTML="";
+  list.forEach(t=>{
+    const b=document.createElement("button"); b.className="bk";
+    b.innerHTML='<div class="g">'+t.genre+'</div><h3>'+t.oeuvre+'</h3><div class="a">'+t.auteur+'</div>'+
+      '<div class="meta"><span class="lv">'+t.niveau+'</span><span>'+t.mots+' mots</span><span>~'+Math.ceil(t.mots/110)+' min</span></div>';
+    b.onclick=()=>openTexte(t);
+    L.appendChild(b);
+  });
+  if(!list.length) L.innerHTML='<p style="color:var(--ink2)">Aucun texte pour ce filtre.</p>';
+}
+
+/* ---------- lecteur ---------- */
+function openTexte(t){
+  cur=t;
+  $("#rTitre").textContent=t.oeuvre;
+  $("#rAuteur").textContent=t.auteur+" · "+t.genre+" · "+t.niveau;
+  $("#rText").innerHTML=t.texte.split("\n").map(p=>"<p>"+p+"</p>").join("");
+  $("#rSrc").innerHTML='Source : <a href="https://fr.wikisource.org/wiki/'+encodeURIComponent(t.source)+'" target="_blank" rel="noopener">'+t.source+'</a> — texte du domaine public.';
+  show("v-read");
+}
+$("#szPlus").onclick=()=>{const e=$("#rText");size=Math.min(2,size+1);e.className="text "+["","big","huge"][size];};
+$("#szMinus").onclick=()=>{const e=$("#rText");size=Math.max(0,size-1);e.className="text "+["","big","huge"][size];};
+$("#backLib").onclick=()=>show("v-lib");
+$("#goFlu").onclick=()=>{startFluence(cur);};
+
+/* ---------- fluence ---------- */
+let words=[], misses=new Set(), stopIdx=-1, t0=0, timerId=null, started=false, elapsed=0;
+
+function startFluence(t){
+  if(!t){ show("v-fluence"); return; }
+  cur=t;
+  show("v-fluence");
+  $("#fluPick").style.display="none";
+  $("#fluPlay").style.display="block";
+  $("#fluResult").style.display="none";
+  buildWords(t);
+}
+function buildWords(t){
+  words = t.texte.replace(/\n/g," ").split(/\s+/).filter(Boolean);
+  misses = new Set(); stopIdx=-1; started=false; elapsed=0;
+  $("#timer").textContent="1:00"; $("#timer").classList.remove("low");
+  $("#startBtn").style.display="inline-block"; $("#startBtn").textContent="Démarrer la lecture";
+  $("#finishBtn").style.display="none";
+  $("#hint").textContent="Clique sur un mot quand il est mal lu.";
+  const box=$("#wtext"); box.innerHTML="";
+  words.forEach((w,i)=>{
+    const s=document.createElement("span"); s.textContent=w+" "; s.dataset.i=i;
+    s.onclick=()=>onWordClick(i);
+    box.appendChild(s);
+  });
+}
+function onWordClick(i){
+  if(!started) return;
+  const el=document.querySelector('#wtext span[data-i="'+i+'"]');
+  if(stopIdx>=0) return;
+  if(misses.has(i)){ misses.delete(i); el.classList.remove("miss"); }
+  else { misses.add(i); el.classList.add("miss"); }
+}
+$("#startBtn").onclick=()=>{
+  if(started) return;
+  started=true; t0=Date.now();
+  $("#startBtn").style.display="none";
+  $("#finishBtn").style.display="inline-block";
+  $("#hint").textContent="Clique sur les mots ratés. À la fin, tu indiqueras ton dernier mot.";
+  timerId=setInterval(()=>{
+    elapsed=Math.floor((Date.now()-t0)/1000);
+    const left=Math.max(0,60-elapsed);
+    $("#timer").textContent="0:"+String(left).padStart(2,"0");
+    if(left<=10) $("#timer").classList.add("low");
+    if(left===0) endReading();
+  },200);
+};
+$("#finishBtn").onclick=()=>endReading();
+$("#resetBtn").onclick=()=>{ if(cur) startFluence(cur); };
+
+function endReading(){
+  elapsed = Math.round((Date.now()-t0)/1000);
+  clearInterval(timerId);
+  started=false;
+  $("#finishBtn").style.display="none";
+  $("#hint").innerHTML="<b>Clique maintenant sur le dernier mot que tu as lu.</b>";
+  const box=$("#wtext");
+  [...box.children].forEach(s=>{ s.style.cursor="crosshair"; });
+  box.onclick=(e)=>{
+    const el=e.target.closest("span"); if(!el) return;
+    if(stopIdx>=0) return;
+    stopIdx=+el.dataset.i;
+    el.classList.add("stop");
+    for(let i=0;i<stopIdx;i++){ const w=box.children[i]; if(!misses.has(i)) w.classList.add("done"); }
+    showResult();
+  };
+}
+function showResult(){
+  const dur = Math.max(1, Math.min(60, elapsed||60));
+  const lus = stopIdx+1;
+  const ok = lus - [...misses].filter(i=>i<=stopIdx).length;
+  const mclm = Math.round(ok*60/dur);
+  if(dur < 15){
+    $("#mclm").textContent="—";
+    $("#pin").style.left="0%";
+    $("#verdic").textContent="Mesure trop courte : il faut lire au moins 15 secondes pour que le chiffre veuille dire quelque chose. Refais l'exercice en allant au bout de la minute.";
+    $("#repere").innerHTML="<b>Pourquoi 1 minute ?</b> La fluence se mesure sur une durée fixe, avec un texte que l'élève ne connaît pas. Sur 3 secondes, on ne mesure rien.";
+    show("v-fluResult"); return;
+  }
+  $("#mclm").textContent=mclm;
+  $("#pin").style.left=Math.min(100, mclm/200*100)+"%";
+  const niv=cur?cur.niveau:"CM1";
+  const rep={"CP":[30,50],"CE1":[50,70],"CE2":[70,90],"CM1":[90,110],"CM2":[110,130]}[niv]||[90,110];
+  let v;
+  if(mclm<rep[0]) v="C'est en dessous du repère de "+niv+" pour cette fin d'année : c'est normal au début. On relit le même texte trois fois dans la semaine — le progrès vient de la relecture, pas de la vitesse.";
+  else if(mclm<rep[1]) v="Tu es dans le repère de "+niv+". Continue : la prochaine étape, c'est de mettre le ton, pas d'aller plus vite.";
+  else v="Tu dépasses le repère de "+niv+". Maintenant travaille l'expressivité : les pauses, les liaisons, les dialogues.";
+  $("#verdic").textContent=v;
+  $("#repere").innerHTML="<b>Repères de fin d'année ("+niv+") :</b> "+rep[0]+" à "+rep[1]+" mots correctement lus par minute. "+
+    "Pour progresser, la méthode qui marche : lire le <b>même texte</b> trois fois de suite — la 1re fois lentement, la 2e en corrigeant, la 3e au bon rythme. C'est la relecture qui fait gagner, pas la nouveauté.";
+  show("v-fluResult");
+}
+$("#againBtn").onclick=()=>{ if(cur) startFluence(cur); };
+$("#otherBtn").onclick=()=>{ $("#fluResult").style.display="none"; $("#fluPlay").style.display="none"; $("#fluPick").style.display="block"; renderPick(); };
+
+function renderPick(){
+  const p=$("#pickList"); p.innerHTML="";
+  TEXTES.slice(0,40).forEach(t=>{
+    const b=document.createElement("button");
+    b.innerHTML=t.oeuvre+"<small>"+t.auteur+" · "+t.niveau+" · "+t.mots+" mots</small>";
+    b.onclick=()=>startFluence(t);
+    p.appendChild(b);
+  });
+}
+
+/* ---------- navigation ---------- */
+function show(id){
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));
+  window.scrollTo({top:0,behavior:"instant"});
+}
+$("#tLib").onclick=()=>{show("v-lib");$("#tLib").classList.add("on");$("#tFlu").classList.remove("on");};
+$("#tFlu").onclick=()=>{show("v-fluence");$("#tFlu").classList.add("on");$("#tLib").classList.remove("on");$("#fluPick").style.display="block";renderPick();};
+
+renderLib();
+</script>
+</body>
+</html>
