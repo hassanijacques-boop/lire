@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lire — les grands classiques, moment par moment</title>
+<meta name="description" content="Les grands textes du domaine public, découpés en moments clés : on lit l'essentiel de l'histoire sans lire tout le livre. Et un atelier de fluence chronométré.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FBF6EA;--paper2:#F3EAD8;--card:#FFFDF7;--ink:#2B2118;--ink2:#6B5D4C;
+  --line:#E0D3BC;--accent:#8B2E3F;--gold:#B8860B;--green:#4A7C59}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;
+  background-image:radial-gradient(#00000006 1.2px,transparent 1.2px);background-size:24px 24px;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit;cursor:pointer;border:none}
+.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(251,246,234,.95);
+  backdrop-filter:blur(10px);border-bottom:2px solid var(--ink)}
+.logo{display:flex;align-items:center;gap:9px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px;letter-spacing:-.03em}
+.logo .mk{width:34px;height:34px;border-radius:9px;background:var(--accent);color:#FFF6E9;display:grid;place-items:center;font-size:17px;box-shadow:2px 2px 0 var(--ink)}
+.logo small{display:block;font-family:Inter,sans-serif;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);font-weight:700}
+.spacer{flex:1}
+.tabs{display:flex;gap:6px}
+.tab{padding:7px 13px;border:2px solid var(--ink);border-radius:999px;background:#fff;font-weight:800;font-size:12.5px;box-shadow:2px 2px 0 var(--ink)}
+.tab.on{background:var(--ink);color:var(--paper)}
+main{max-width:1020px;margin:0 auto;padding:16px 16px 70px}
+.view{display:none}.view.on{display:block}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,5vw,44px);letter-spacing:-.04em;line-height:1.02;margin:8px 0 0}
+h1 em{font-style:normal;color:var(--accent)}
+p.lead{color:var(--ink2);font-size:15px;max-width:62ch;margin:12px 0 0;line-height:1.6}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:20px 0 14px;align-items:center}
+.f{font-size:11.5px;font-weight:800;padding:6px 11px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink2)}
+.f.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.flab{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin-right:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px}
+.bk{background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:14px;text-align:left;box-shadow:3px 3px 0 var(--ink);
+  display:flex;flex-direction:column;gap:7px;transition:.12s;min-height:170px}
+.bk:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.bk .g{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.bk h3{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;margin:0;letter-spacing:-.02em;line-height:1.15}
+.bk .a{font-family:Lora,serif;font-style:italic;font-size:13.5px;color:var(--ink2)}
+.bk .meta{margin-top:auto;display:flex;gap:6px;align-items:center;font-size:11px;font-weight:700;color:var(--ink2);flex-wrap:wrap}
+.bk .lv{background:var(--paper2);border-radius:99px;padding:2px 8px}
+.bk .nb{background:var(--accent);color:#fff;border-radius:99px;padding:2px 8px}
+.pbar{height:5px;border-radius:99px;background:var(--paper2);overflow:hidden;margin-top:2px}
+.pbar i{display:block;height:100%;background:var(--green)}
+
+/* ---------- OEUVRE ---------- */
+.ohead{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:18px;box-shadow:4px 4px 0 var(--ink)}
+.ohead h2{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;margin:0;letter-spacing:-.03em}
+.ohead .a{font-family:Lora,serif;font-style:italic;color:var(--ink2);margin-top:3px}
+.ohead .tags{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;font-size:11px;font-weight:800}
+.ohead .tags span{background:var(--paper2);border-radius:99px;padding:3px 9px;color:var(--ink2)}
+.moms{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.mom{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;transition:.12s}
+.mom:hover{border-color:var(--ink);box-shadow:2px 2px 0 var(--ink);transform:translate(-1px,-1px)}
+.mom .n{width:30px;height:30px;border-radius:9px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:800;font-size:13px;flex:0 0 auto}
+.mom.read .n{background:var(--green)}
+.mom .t{flex:1;min-width:0}
+.mom .t b{display:block;font-size:14px;letter-spacing:-.01em}
+.mom .t small{color:var(--ink2);font-size:11.5px;font-weight:600}
+.mom .go{font-size:16px;color:var(--ink2)}
+
+/* ---------- LECTEUR ---------- */
+.reader{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:22px;box-shadow:4px 4px 0 var(--ink);margin-top:12px}
+.rhead{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:16px}
+.rhead .k{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.rhead h2{font-family:'Bricolage Grotesque',sans-serif;font-size:21px;margin:2px 0 0;letter-spacing:-.02em;line-height:1.2}
+.rhead .spacer{flex:1}
+.tool{display:flex;gap:6px}
+.tool button{width:34px;height:34px;border-radius:9px;border:1.5px solid var(--line);background:#fff;font-weight:800;font-size:13px}
+.text{font-family:Lora,serif;font-size:19px;line-height:1.85;text-align:justify;hyphens:auto;color:#241B12}
+.text p{margin:0 0 1em}
+.text.big{font-size:23px}.text.huge{font-size:27px;line-height:1.75}
+.src{margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink2);font-weight:600}
+.src a{color:var(--accent)}
+.navmom{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:14px}
+
+/* ---------- FLUENCE ---------- */
+.flu{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:20px;box-shadow:4px 4px 0 var(--ink);margin-top:14px}
+.timer{font-family:'Bricolage Grotesque',sans-serif;font-size:44px;letter-spacing:-.04em;text-align:center;margin:2px 0 6px}
+.timer.low{color:var(--accent)}
+.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.btn{padding:12px 18px;border-radius:12px;border:2px solid var(--ink);background:#fff;font-weight:800;font-size:14px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;color:var(--ink);display:inline-block}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn:active{transform:translateY(2px);box-shadow:1px 1px 0 var(--ink)}
+.wtext{font-family:Lora,serif;font-size:21px;line-height:2.05;text-align:justify}
+.wtext span{cursor:pointer;border-radius:4px;padding:1px 0}
+.wtext span:hover{background:#F3E7D0}
+.wtext span.miss{background:#FADBD8;color:#A02B2B;text-decoration:line-through;text-decoration-thickness:2px}
+.wtext span.done{background:#D9EAD3}
+.wtext span.stop{background:var(--ink);color:var(--paper)}
+.hint{text-align:center;font-size:12.5px;color:var(--ink2);font-weight:600;margin:10px 0 0}
+.result{text-align:center;padding:8px 0}
+.result .big{font-family:'Bricolage Grotesque',sans-serif;font-size:56px;letter-spacing:-.04em;color:var(--accent);line-height:1}
+.result .lab{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-top:4px}
+.result p{font-size:14.5px;color:var(--ink2);max-width:46ch;margin:14px auto 0;line-height:1.6}
+.scale{margin:18px auto 0;max-width:520px}
+.scale .bar{height:14px;border-radius:99px;background:linear-gradient(90deg,#E8C9A0,#8FBF9F,#5E9E7A);border:1.5px solid var(--ink);position:relative}
+.scale .pin{position:absolute;top:-6px;width:4px;height:26px;background:var(--ink);border-radius:2px;transform:translateX(-2px)}
+.scale .marks{display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--ink2);margin-top:5px}
+.repere{background:var(--paper2);border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;margin-top:16px;font-size:13px;color:var(--ink2);line-height:1.6}
+.repere b{color:var(--ink)}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:12px}
+.pick button{text-align:left;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:700;line-height:1.3}
+.pick button small{display:block;font-weight:600;color:var(--ink2);margin-top:3px;font-size:11px}
+footer{text-align:center;color:#8C7F6D;font-size:11.5px;padding:22px 16px 40px;line-height:1.8}
+footer a{font-weight:700;border-bottom:1.5px solid var(--accent);color:var(--ink)}
+@media(max-width:620px){
+  .logo small{display:none}
+  .text{font-size:17px;line-height:1.8;text-align:left}
+  .wtext{font-size:18px;line-height:1.95;text-align:left}
+  .reader,.flu,.ohead{padding:15px}
+  .timer{font-size:38px}
+  .tabs .tab{padding:6px 10px;font-size:11.5px}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="logo"><span class="mk">L</span><span>LIRE<small>moment par moment</small></span></div>
+  <div class="spacer"></div>
+  <div class="tabs">
+    <button class="tab on" id="tLib">Œuvres</button>
+    <button class="tab" id="tFlu">Fluence</button>
+  </div>
+</div>
+
+<main>
+
+<section class="view on" id="v-lib">
+  <h1>Les moments clés, <em>pas le livre entier.</em></h1>
+  <p class="lead">Chaque œuvre est découpée en scènes et chapitres choisis : le duel, la rencontre, la trahison, le dénouement. On suit l'histoire sans se perdre, et chaque moment se lit en trois minutes.</p>
+  <div class="filters" id="fGenre"><span class="flab">Genre</span></div>
+  <div class="filters" id="fNiv" style="margin-top:-6px"><span class="flab">Niveau</span></div>
+  <div class="grid" id="liste"></div>
+</section>
+
+<section class="view" id="v-oeuvre">
+  <button class="btn" id="backLib" style="margin-bottom:10px">← Toutes les œuvres</button>
+  <div class="ohead" id="ohead"></div>
+  <div class="moms" id="moms"></div>
+</section>
+
+<section class="view" id="v-read">
+  <button class="btn" id="backWork" style="margin-bottom:10px">← Les moments</button>
+  <div class="reader">
+    <div class="rhead">
+      <div>
+        <div class="k" id="rKicker"></div>
+        <h2 id="rTitre"></h2>
+      </div>
+      <div class="spacer"></div>
+      <div class="tool"><button id="szMinus">A−</button><button id="szPlus">A+</button></div>
+    </div>
+    <div class="text" id="rText"></div>
+    <div class="src" id="rSrc"></div>
+  </div>
+  <div class="navmom">
+    <button class="btn" id="prevMom">← Moment précédent</button>
+    <button class="btn primary" id="nextMom">Moment suivant →</button>
+  </div>
+</section>
+
+<section class="view" id="v-fluence">
+  <h1>Lire à voix haute, <em>et se mesurer.</em></h1>
+  <p class="lead">Une minute de lecture sur un moment que l'élève ne connaît pas. On clique sur les mots ratés, puis sur le dernier mot atteint. L'application calcule les mots correctement lus par minute.</p>
+  <div id="fluPick">
+    <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:17px;margin:22px 0 0">Choisis un moment</h2>
+    <div class="pick" id="pickList"></div>
+  </div>
+  <div id="fluPlay" style="display:none">
+    <div class="timer" id="timer">1:00</div>
+    <div class="controls">
+      <button class="btn primary" id="startBtn">Démarrer la lecture</button>
+      <button class="btn" id="finishBtn" style="display:none">J'ai fini / Arrêter</button>
+      <button class="btn" id="resetBtn">Recommencer</button>
+    </div>
+    <div class="wtext" id="wtext"></div>
+    <p class="hint" id="hint">Clique sur un mot quand il est mal lu.</p>
+  </div>
+  <div id="fluResult" style="display:none">
+    <div class="flu">
+      <div class="result">
+        <div class="big" id="mclm">0</div>
+        <div class="lab">mots correctement lus / minute</div>
+        <div class="scale">
+          <div class="bar"><div class="pin" id="pin" style="left:0%"></div></div>
+          <div class="marks"><span>0</span><span>50</span><span>100</span><span>150</span><span>200</span></div>
+        </div>
+        <p id="verdic"></p>
+      </div>
+      <div class="repere" id="repere"></div>
+      <div style="text-align:center;margin-top:16px">
+        <button class="btn primary" id="againBtn">Refaire</button>
+        <button class="btn" id="otherBtn">Un autre moment</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Lire — textes du domaine public, reproduits d'après <a href="https://fr.wikisource.org/">Wikisource</a>.<br>
+  Chaque moment indique son origine exacte · Aucune donnée ne quitte l'appareil.
+</footer>
+
+<script>
+const OEUVRES = __OEUVRES__;
+const $ = s => document.querySelector(s);
+const KEY = "lire_v2";
+let vus = JSON.parse(localStorage.getItem(KEY) || "{}");
+const save = () => localStorage.setItem(KEY, JSON.stringify(vus));
+
+let fGenre="Tout", fNiv="Tout", curWork=null, curMom=0, size=0;
+
+/* ---------- bibliothèque ---------- */
+function renderLib(){
+  const genres=["Tout",...new Set(OEUVRES.map(o=>o.genre))];
+  const nivs=["Tout",...new Set(OEUVRES.map(o=>o.niveau))].sort();
+  const g=$("#fGenre"); g.querySelectorAll("button").forEach(x=>x.remove());
+  genres.forEach(x=>{const b=document.createElement("button");b.className="f"+(x===fGenre?" on":"");b.textContent=x;
+    b.onclick=()=>{fGenre=x;renderLib();};g.appendChild(b);});
+  const n=$("#fNiv"); n.querySelectorAll("button").forEach(x=>x.remove());
+  nivs.forEach(x=>{const b=document.createElement("button");b.className="f"+(x===fNiv?" on":"");b.textContent=x;
+    b.onclick=()=>{fNiv=x;renderLib();};n.appendChild(b);});
+
+  const list=OEUVRES.filter(o=>(fGenre==="Tout"||o.genre===fGenre)&&(fNiv==="Tout"||o.niveau===fNiv));
+  const L=$("#liste"); L.innerHTML="";
+  list.forEach((o,i)=>{
+    const idx=OEUVRES.indexOf(o);
+    const lus=o.moments.filter((m,j)=>vus[idx+"-"+j]).length;
+    const pct=Math.round(100*lus/o.moments.length);
+    const b=document.createElement("button"); b.className="bk";
+    b.innerHTML='<div class="g">'+o.genre+'</div><h3>'+o.oeuvre+'</h3><div class="a">'+o.auteur+'</div>'+
+      '<div class="meta"><span class="lv">'+o.niveau+'</span><span class="nb">'+o.moments.length+' moments</span>'+
+      (lus?'<span>'+lus+' lu'+(lus>1?'s':'')+'</span>':'')+'</div>'+
+      '<div class="pbar"><i style="width:'+pct+'%"></i></div>';
+    b.onclick=()=>openWork(idx);
+    L.appendChild(b);
+  });
+  if(!list.length) L.innerHTML='<p style="color:var(--ink2)">Rien pour ce filtre.</p>';
+}
+
+/* ---------- œuvre ---------- */
+function openWork(i){
+  curWork=i; const o=OEUVRES[i];
+  $("#ohead").innerHTML='<h2>'+o.oeuvre+'</h2><div class="a">'+o.auteur+'</div>'+
+    '<div class="tags"><span>'+o.genre+'</span><span>'+o.niveau+'</span><span>'+o.moments.length+' moments</span></div>';
+  const M=$("#moms"); M.innerHTML="";
+  o.moments.forEach((m,j)=>{
+    const lu=vus[i+"-"+j];
+    const b=document.createElement("button"); b.className="mom"+(lu?" read":"");
+    b.innerHTML='<span class="n">'+(lu?"✓":(j+1))+'</span>'+
+      '<span class="t"><b>'+(m.t||"Moment "+(j+1))+'</b><small>'+m.mots+' mots · ~'+Math.ceil(m.mots/110)+' min</small></span>'+
+      '<span class="go">›</span>';
+    b.onclick=()=>openMoment(i,j);
+    M.appendChild(b);
+  });
+  show("v-oeuvre");
+}
+
+/* ---------- lecture ---------- */
+function openMoment(i,j){
+  curWork=i; curMom=j;
+  const o=OEUVRES[i], m=o.moments[j];
+  $("#rKicker").textContent=o.oeuvre+" · moment "+(j+1)+" sur "+o.moments.length;
+  $("#rTitre").textContent=m.t||("Moment "+(j+1));
+  $("#rText").innerHTML=m.x.split("\n").map(p=>"<p>"+p+"</p>").join("");
+  $("#rSrc").innerHTML=m.src?('Source : <a href="https://fr.wikisource.org/wiki/'+encodeURIComponent(m.src)+'" target="_blank" rel="noopener">'+m.src+'</a> — domaine public.'):"Domaine public.";
+  $("#prevMom").style.visibility = j>0 ? "visible" : "hidden";
+  $("#nextMom").style.visibility = j<o.moments.length-1 ? "visible" : "hidden";
+  vus[i+"-"+j]=true; save();
+  show("v-read");
+}
+$("#prevMom").onclick=()=>{ if(curMom>0) openMoment(curWork,curMom-1); };
+$("#nextMom").onclick=()=>{ if(curMom<OEUVRES[curWork].moments.length-1) openMoment(curWork,curMom+1); };
+$("#backWork").onclick=()=>openWork(curWork);
+$("#backLib").onclick=()=>{renderLib();show("v-lib");};
+$("#szPlus").onclick=()=>{size=Math.min(2,size+1);$("#rText").className="text "+["","big","huge"][size];};
+$("#szMinus").onclick=()=>{size=Math.max(0,size-1);$("#rText").className="text "+["","big","huge"][size];};
+
+/* ---------- fluence ---------- */
+let words=[], misses=new Set(), stopIdx=-1, t0=0, timerId=null, started=false, elapsed=0, fluNiv="CM1", fluTxt="";
+
+function startFluence(oi,mi){
+  const m=OEUVRES[oi].moments[mi];
+  curWork=oi; curMom=mi; fluNiv=OEUVRES[oi].niveau; fluTxt=m.x;
+  show("v-fluence");
+  $("#fluPick").style.display="none"; $("#fluPlay").style.display="block"; $("#fluResult").style.display="none";
+  buildWords(m.x);
+}
+function buildWords(txt){
+  words=txt.replace(/\n/g," ").split(/\s+/).filter(Boolean);
+  misses=new Set(); stopIdx=-1; started=false; elapsed=0;
+  $("#timer").textContent="1:00"; $("#timer").classList.remove("low");
+  $("#startBtn").style.display="inline-block"; $("#startBtn").textContent="Démarrer la lecture";
+  $("#finishBtn").style.display="none"; $("#hint").textContent="Clique sur un mot quand il est mal lu.";
+  $("#wtext").onclick=null;
+  const box=$("#wtext"); box.innerHTML="";
+  words.forEach((w,i)=>{
+    const s=document.createElement("span"); s.textContent=w+" "; s.dataset.i=i;
+    s.onclick=()=>onWordClick(i); box.appendChild(s);
+  });
+}
+function onWordClick(i){
+  if(!started||stopIdx>=0) return;
+  const el=document.querySelector('#wtext span[data-i="'+i+'"]');
+  if(misses.has(i)){misses.delete(i);el.classList.remove("miss");}
+  else {misses.add(i);el.classList.add("miss");}
+}
+$("#startBtn").onclick=()=>{
+  if(started) return; started=true; t0=Date.now();
+  $("#startBtn").style.display="none"; $("#finishBtn").style.display="inline-block";
+  $("#hint").textContent="Clique sur les mots ratés. À la fin, tu indiqueras ton dernier mot.";
+  timerId=setInterval(()=>{
+    elapsed=Math.floor((Date.now()-t0)/1000);
+    const left=Math.max(0,60-elapsed);
+    $("#timer").textContent="0:"+String(left).padStart(2,"0");
+    if(left<=10) $("#timer").classList.add("low");
+    if(left===0) endReading();
+  },200);
+};
+$("#finishBtn").onclick=()=>endReading();
+$("#resetBtn").onclick=()=>buildWords(fluTxt);
+
+function endReading(){
+  elapsed=Math.round((Date.now()-t0)/1000);
+  clearInterval(timerId); started=false;
+  $("#finishBtn").style.display="none";
+  $("#hint").innerHTML="<b>Clique sur le dernier mot que tu as lu.</b>";
+  const box=$("#wtext");
+  box.onclick=(e)=>{
+    const el=e.target.closest("span"); if(!el||stopIdx>=0) return;
+    stopIdx=+el.dataset.i; el.classList.add("stop");
+    for(let i=0;i<stopIdx;i++){const w=box.children[i];if(!misses.has(i))w.classList.add("done");}
+    showResult();
+  };
+}
+function showResult(){
+  const dur=Math.max(1,Math.min(60,elapsed||60));
+  const lus=stopIdx+1;
+  const ok=lus-[...misses].filter(i=>i<=stopIdx).length;
+  const mclm=Math.round(ok*60/dur);
+  const niv=fluNiv;
+  const rep={"CP":[30,50],"CE1":[50,70],"CE2":[70,90],"CM1":[90,110],"CM2":[110,130]}[niv]||[90,110];
+  if(dur<15){
+    $("#mclm").textContent="—"; $("#pin").style.left="0%";
+    $("#verdic").textContent="Mesure trop courte : il faut lire au moins 15 secondes pour que le chiffre ait un sens. Refais l'exercice en allant au bout de la minute.";
+    $("#repere").innerHTML="<b>Pourquoi une minute ?</b> La fluence se mesure sur une durée fixe, sur un texte inconnu.";
+    show("v-fluResult"); return;
+  }
+  $("#mclm").textContent=mclm; $("#pin").style.left=Math.min(100,mclm/200*100)+"%";
+  let v;
+  if(mclm<rep[0]) v="Sous le repère de "+niv+" : c'est normal au début. Le progrès vient de la relecture du même texte, trois fois dans la semaine.";
+  else if(mclm<rep[1]) v="Tu es dans le repère de "+niv+". Prochaine étape : le ton, pas la vitesse.";
+  else v="Au-dessus du repère de "+niv+". Travaille maintenant l'expressivité : pauses, liaisons, dialogues.";
+  $("#verdic").textContent=v;
+  $("#repere").innerHTML="<b>Repères de fin d'année ("+niv+") :</b> "+rep[0]+" à "+rep[1]+" mots correctement lus par minute. "+
+    "La méthode qui marche : lire le <b>même texte</b> trois fois — lentement, puis en corrigeant, puis au bon rythme.";
+  show("v-fluResult");
+}
+$("#againBtn").onclick=()=>startFluence(curWork,curMom);
+$("#otherBtn").onclick=()=>{$("#fluResult").style.display="none";$("#fluPlay").style.display="none";$("#fluPick").style.display="block";renderPick();};
+
+function renderPick(){
+  const p=$("#pickList"); p.innerHTML="";
+  OEUVRES.forEach((o,oi)=>o.moments.slice(0,3).forEach((m,mi)=>{
+    const b=document.createElement("button");
+    b.innerHTML=(m.t||"Moment")+"<small>"+o.oeuvre+" · "+o.niveau+" · "+m.mots+" mots</small>";
+    b.onclick=()=>startFluence(oi,mi);
+    p.appendChild(b);
+  }));
+}
+
+/* ---------- nav ---------- */
+function show(id){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===id));window.scrollTo({top:0,behavior:"instant"});}
+$("#tLib").onclick=()=>{show("v-lib");$("#tLib").classList.add("on");$("#tFlu").classList.remove("on");renderLib();};
+$("#tFlu").onclick=()=>{show("v-fluence");$("#tFlu").classList.add("on");$("#tLib").classList.remove("on");
+  $("#fluPick").style.display="block";renderPick();};
+
+renderLib();
+</script>
+</body>
+</html>
