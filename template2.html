@@ -269,7 +269,9 @@ function openMoment(i,j){
   $("#rKicker").textContent=o.oeuvre+" · moment "+(j+1)+" sur "+o.moments.length;
   $("#rTitre").textContent=m.t||("Moment "+(j+1));
   $("#rText").innerHTML=m.x.split("\n").map(p=>"<p>"+p+"</p>").join("");
-  $("#rSrc").innerHTML=m.src?('Source : <a href="https://fr.wikisource.org/wiki/'+encodeURIComponent(m.src)+'" target="_blank" rel="noopener">'+m.src+'</a> — domaine public.'):"Domaine public.";
+  $("#rSrc").innerHTML = m.src ? ('Source : ' + m.src +
+    (m.url ? ' — <a href="https://fr.wikisource.org/wiki/' + encodeURIComponent(m.url) + '" target="_blank" rel="noopener">texte original ↗</a>' : '') +
+    ' · domaine public.') : "Domaine public.";
   $("#prevMom").style.visibility = j>0 ? "visible" : "hidden";
   $("#nextMom").style.visibility = j<o.moments.length-1 ? "visible" : "hidden";
   vus[i+"-"+j]=true; save();
