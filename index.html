@@ -92,6 +92,11 @@ p.lead{color:var(--ink2);font-size:15px;max-width:62ch;margin:12px 0 0;line-heig
 .wtext span.stop{background:var(--ink);color:var(--paper)}
 .hint{text-align:center;font-size:12.5px;color:var(--ink2);font-weight:600;margin:10px 0 0}
 .result{text-align:center;padding:8px 0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:0 0 16px}
+.stats>div{background:#fff;border:2px solid var(--ink);border-radius:12px;padding:9px 4px}
+.stats b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:19px;line-height:1.1;color:var(--ink)}
+.stats span{display:block;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);margin-top:3px}
+.live{display:inline-flex;align-items:center;gap:7px;margin-left:10px;font-size:12px;font-weight:800;color:#B91C1C}
 .result .big{font-family:'Bricolage Grotesque',sans-serif;font-size:56px;letter-spacing:-.04em;color:var(--accent);line-height:1}
 .result .lab{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-top:4px}
 .result p{font-size:14.5px;color:var(--ink2);max-width:46ch;margin:14px auto 0;line-height:1.6}
@@ -115,47 +120,8 @@ footer a{font-weight:700;border-bottom:1.5px solid var(--accent);color:var(--ink
   .tabs .tab{padding:6px 10px;font-size:11.5px}
 }
 </style>
-<link rel="manifest" href="manifest.json">
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function(){
-    navigator.serviceWorker.register("sw.js").catch(function(){});
-  });
-}
-</script>
-<style>
-.tubebar{display:flex;gap:7px;overflow-x:auto;padding:9px 12px;background:#FFFDF7;border-bottom:2px solid #1B2440;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;font-family:Inter,system-ui,-apple-system,sans-serif;position:relative}
-.tubebar::-webkit-scrollbar{display:none}
-.tubebar a{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:7px 13px;border:2px solid #1B2440;border-radius:999px;
-  background:#fff;color:#1B2440;font-size:12.5px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap;
-  box-shadow:2px 2px 0 #1B2440;transition:transform .1s,box-shadow .1s}
-.tubebar a:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 #1B2440}
-.tubebar a:active{transform:translateY(2px);box-shadow:none}
-.tubebar a.on{background:#1B2440;color:#fff;box-shadow:2px 2px 0 #F5A623}
-.tubebar a.on .num{color:#F5A623}
-.tubebar .sep{flex:0 0 auto;width:1px;align-self:stretch;background:#E4DACA;margin:0 2px}
-.tubebar{position:relative}
-.tubebar .fade{position:absolute;right:0;top:0;bottom:0;width:36px;pointer-events:none;
-  background:linear-gradient(90deg,rgba(255,253,247,0),#FFFDF7 78%);border-radius:0}
-@media(max-width:620px){.tubebar{padding:8px 10px;gap:6px}.tubebar a{padding:6px 11px;font-size:11.5px}}
-</style>
 </head>
 <body>
-<nav class="tubebar" aria-label="Navigation entre les sites"><a href="https://hassanijacques-boop.github.io/tube/" title="l'ensemble des niveaux"><span class="num">🏠</span>Tous</a><span class="sep"></span><a href="https://hassanijacques-boop.github.io/ecoletube/" title="CP → CM2 — école La Rose"><span class="num">🎒</span>La Rose</a><a href="https://hassanijacques-boop.github.io/college-tube/" title="6e → 3e"><span class="num">🏫</span>Collège</a><a href="https://hassanijacques-boop.github.io/lycee-tube/" title="2de → Tle"><span class="num">🎓</span>Lycée</a><a href="https://hassanijacques-boop.github.io/bts-tube/" title="GME"><span class="num">💼</span>BTS</a><a href="https://hassanijacques-boop.github.io/gtla-tube/" title="BTS GTLA"><span class="num">📦</span>GTLA</a><a href="https://hassanijacques-boop.github.io/lire/" class="on"  title="Les classiques, à voix haute"><span class="num">📖</span>Lire</a><a href="https://hassanijacques-boop.github.io/reseaux-tube/" title="TSRS"><span class="num">🖧</span>Réseaux</a><a href="https://hassanijacques-boop.github.io/defi-ecole/" title="réviser en jouant"><span class="num">🎯</span>Défis</a><a href="https://hassanijacques-boop.github.io/defi-ecole/trivial.html" title="Le Trivial des questions générales"><span class="num">🎲</span>Trivial</a><span class="fade"></span></nav>
-<script>
-(function(){
-  var LOCAL = "2026-11-10-c";
-  fetch("version.json?t="+Date.now(), {cache:"no-store"})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d && d.v && d.v !== LOCAL){
-        location.replace(location.pathname + "?v=" + encodeURIComponent(d.v));
-      }
-    }).catch(function(){});
-})();
-</script>
-
 
 <div class="top">
   <div class="logo"><span class="mk">L</span><span>LIRE<small>moment par moment</small></span></div>
@@ -210,7 +176,7 @@ if ("serviceWorker" in navigator) {
     <div class="pick" id="pickList"></div>
   </div>
   <div id="fluPlay" style="display:none">
-    <div class="timer" id="timer">1:00</div>
+    <div class="timer" id="timer">1:00</div><span class="live" id="liveCount">0 mot raté</span>
     <div class="controls">
       <button class="btn primary" id="startBtn">Démarrer la lecture</button>
       <button class="btn" id="finishBtn" style="display:none">J'ai fini / Arrêter</button>
@@ -222,6 +188,12 @@ if ("serviceWorker" in navigator) {
   <div id="fluResult" style="display:none">
     <div class="flu">
       <div class="result">
+        <div class="stats">
+          <div><b id="sLus">0</b><span>mots lus</span></div>
+          <div><b id="sRat">0</b><span>mots ratés</span></div>
+          <div><b id="sOk">0</b><span>mots corrects</span></div>
+          <div><b id="sPct">0 %</b><span>du texte</span></div>
+        </div>
         <div class="big" id="mclm">0</div>
         <div class="lab">mots correctement lus / minute</div>
         <div class="scale">
@@ -351,6 +323,11 @@ function onWordClick(i){
   const el=document.querySelector('#wtext span[data-i="'+i+'"]');
   if(misses.has(i)){misses.delete(i);el.classList.remove("miss");}
   else {misses.add(i);el.classList.add("miss");}
+  const lc=$("#liveCount");
+  if(lc){
+    const n=misses.size;
+    lc.textContent = n===0 ? "0 mot raté" : n===1 ? "1 mot raté" : n+" mots ratés";
+  }
 }
 $("#startBtn").onclick=()=>{
   if(started) return; started=true; t0=Date.now();
@@ -376,15 +353,25 @@ function endReading(){
   box.onclick=(e)=>{
     const el=e.target.closest("span"); if(!el||stopIdx>=0) return;
     stopIdx=+el.dataset.i; el.classList.add("stop");
+    const h=$("#hint");
+    if(h && words.length) h.innerHTML="<b>Mot "+(stopIdx+1)+" sur "+words.length+"</b> — soit "+Math.round((stopIdx+1)/words.length*100)+" % du texte.";
     for(let i=0;i<stopIdx;i++){const w=box.children[i];if(!misses.has(i))w.classList.add("done");}
     showResult();
   };
 }
 function showResult(){
-  const dur=Math.max(1,Math.min(60,elapsed||60));
-  const lus=stopIdx+1;
-  const ok=lus-[...misses].filter(i=>i<=stopIdx).length;
-  const mclm=Math.round(ok*60/dur);
+  const dur = Math.max(1, Math.min(60, elapsed||60));
+  const lus = stopIdx+1;
+  const rat = [...misses].filter(i=>i<=stopIdx).length;
+  const ok = lus - rat;
+  const mclm = Math.round(ok*60/dur);
+  const total = words.length || 0;
+  if($("#sLus")){
+    $("#sLus").textContent = lus;
+    $("#sRat").textContent = rat;
+    $("#sOk").textContent = ok;
+    $("#sPct").textContent = total ? Math.round(lus/total*100)+" %" : "—";
+  }
   const niv=fluNiv;
   const rep={"CP":[30,50],"CE1":[50,70],"CE2":[70,90],"CM1":[90,110],"CM2":[110,130]}[niv]||[90,110];
   if(dur<15){
